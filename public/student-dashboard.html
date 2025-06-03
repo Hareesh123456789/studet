@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Student Dashboard</h2>
+  <div id="output"></div>
+
+  <script>
+    const username = localStorage.getItem("loggedInUser"); // Store this after login
+
+    if (!username) {
+      document.getElementById('output').innerText = 'You are not logged in.';
+    } else {
+      fetch(`/student/data?username=${username}`)
+        .then(res => res.json())
+        .then(data => {
+          let html = `<p><strong>Attendance:</strong> ${data.attendance}%</p>`;
+          html += `<h3>Marks:</h3><ul>`;
+          data.marks.forEach(item => {
+            html += `<li>${item.subject}: ${item.marks}</li>`;
+          });
+          html += `</ul>`;
+          document.getElementById('output').innerHTML = html;
+        });
+    }
+  </script>
+</body>
+</html>
